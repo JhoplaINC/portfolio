@@ -79,7 +79,7 @@ export default function ContactForm() {
                         <div className="flex items-center gap-2">
                             <FontAwesomeIcon icon={faMobile} />
                             <a
-                                href="https://wa.me/56983069105/?text=¡Hola! te contacto desde tu portafolio, me gustaría saber más sobre tus servicios."
+                                href="https://wa.me/56983069105/?text=¡Hola! te contacto desde tu portafolio, me gustaría saber más sobre ti."
                                 target="_blank"
                                 className="underline"
                             >
@@ -102,7 +102,7 @@ export default function ContactForm() {
             <Modal
                 handler={() => setOpenModal(false)}
                 isOpen={openModal}
-                title="¡Mensaje enviado!"
+                title="¡Mensaje enviado! (No del todo)"
                 content={`Lo sentimos, este proyecto no cuenta con un sistema de envío de correos. Por favor, contáctenos a través de nuestros canales oficiales.`}
                 buttons={[
                     {
