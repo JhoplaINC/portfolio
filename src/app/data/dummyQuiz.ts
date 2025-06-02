@@ -1,3 +1,10 @@
+export interface iQuizQuestion {
+    question: string;
+    options: string[];
+    id: number;
+    correctAnswer: string;
+}
+
 export const quizQuestions = [
     {
         question:

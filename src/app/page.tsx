@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { animate } from "animejs";
 import QuizForm from "./components/quiz/QuizForm";
-import { quizQuestions } from "./data/dummyQuiz";
+import { iQuizQuestion, quizQuestions } from "./data/dummyQuiz";
 
 export default function Home() {
     const [loadTimer, setLoadTimer] = useState(true);
-    const [questions, _] = useState(quizQuestions);
+    const [questions, setQuestions] = useState<iQuizQuestion[]>([]);
     const [step, setStep] = useState(0);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +56,12 @@ export default function Home() {
             });
         }
     };
+
+    useEffect(() => {
+        (() => {
+            setQuestions(quizQuestions);
+        })();
+    }, []);
 
     return (
         <div className="pt-10">

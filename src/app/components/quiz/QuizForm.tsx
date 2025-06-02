@@ -1,11 +1,11 @@
-import { Question } from "@/app/interfaces/question.interface";
 import { useEffect, useState } from "react";
 import QuestionStep from "../steps/QuestionStep";
 import { Intro } from "../steps/Intro";
 import { FinalStep } from "../steps/FinalStep";
+import { iQuizQuestion } from "@/app/data/dummyQuiz";
 
 interface QuizFormProps {
-    questions: Question[];
+    questions: iQuizQuestion[];
     resetTimer?: () => void;
     forceCompleteTimer?: () => void;
     isFinalQuestion?: () => boolean;
@@ -26,8 +26,12 @@ export default function QuizForm({
         if (answer !== undefined) {
             setAnswers([...answers, answer]);
         }
-        if (currentStep < questions.length) {
-            if (currentStep === questions.length - 1 && isFinalQuestion) {
+        if (currentStep < questions!.length) {
+            if (
+                questions &&
+                currentStep === questions.length - 1 &&
+                isFinalQuestion
+            ) {
                 isFinalQuestion();
             }
             resetTimer?.();
@@ -37,7 +41,7 @@ export default function QuizForm({
 
     useEffect(() => {
         onStepChange?.(currentStep);
-    }, [currentStep]);
+    }, [currentStep, onStepChange]);
 
     const startQuiz = () => {
         setCurrentStep(1);
@@ -47,19 +51,21 @@ export default function QuizForm({
     return (
         <div className="w-full h-full flex items-center justify-center p-4">
             {currentStep === 0 && <Intro onStart={() => startQuiz()} />}
-            {currentStep > 0 && currentStep <= questions.length && (
-                <div className="w-full">
-                    <p className="text-right mb-4 font-bold">
-                        {currentStep}/{questions.length}
-                    </p>
-                    <QuestionStep
-                        question={questions[currentStep - 1]}
-                        onNext={handleNext}
-                        forceCompleteTimer={forceCompleteTimer}
-                    />
-                </div>
-            )}
-            {currentStep > questions.length && (
+            {questions &&
+                currentStep > 0 &&
+                currentStep <= questions.length && (
+                    <div className="w-full">
+                        <p className="text-right mb-4 font-bold">
+                            {currentStep}/{questions && questions.length}
+                        </p>
+                        <QuestionStep
+                            question={questions![currentStep - 1]}
+                            onNext={handleNext}
+                            forceCompleteTimer={forceCompleteTimer}
+                        />
+                    </div>
+                )}
+            {questions && currentStep > questions.length && (
                 <FinalStep answers={answers} questions={questions} />
             )}
         </div>

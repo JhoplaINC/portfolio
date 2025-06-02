@@ -1,13 +1,13 @@
-import { Question } from "@/app/interfaces/question.interface";
+import { iQuizQuestion } from "@/app/data/dummyQuiz";
 
 export const FinalStep = ({
     answers,
     questions,
 }: {
     answers: string[];
-    questions: Question[];
+    questions: iQuizQuestion[] | undefined;
 }) => {
-    const incorrectAnswers = questions
+    const incorrectAnswers = questions!
         .map((question, index) => {
             const userAnswer = answers[index];
             if (userAnswer !== question.correctAnswer) {
