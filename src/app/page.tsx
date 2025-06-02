@@ -64,8 +64,8 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="pt-10">
-            <div ref={containerRef} className="relative w-[1200px] mx-auto">
+        <div className="pt-10 max-w-xs md:max-w-6xl mx-auto">
+            <div ref={containerRef} className="relative">
                 <svg className="absolute inset-0 z-10 w-full h-full pointer-events-none overflow-visible">
                     <rect
                         ref={rectRef}

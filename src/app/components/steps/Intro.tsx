@@ -2,47 +2,23 @@ export const Intro = ({ onStart }: { onStart: () => void }) => (
     <div className="w-full h-full flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold mb-4">Bienvenido al examen</h1>
         <p className="mb-6 text-center">
-            Este examen consta de 7 preguntas. Intenta responder con honestidad
+            Este examen tiene 7 preguntas. Responde con honestidad.
             <br />
-            Al finalizar, recibirás un resumen de tus respuestas. <br />A
-            continuación, podrás ver una lista que debes tener en consideración
-            al momento de rellenar el formulario
+            Al final verás un resumen de tus respuestas y una lista con puntos
+            importantes:
         </p>
         <ul className="list-disc mb-6 text-left">
-            <li>Responde con sinceridad</li>
-            <li>Una vez que selecciones una respuesta, no podrás cambiarla</li>
+            <li>Responde sinceramente</li>
+            <li>No podrás cambiar tu respuesta una vez elegida</li>
+            <li>Tienes 25 segundos por pregunta</li>
+            <li>Verás en qué preguntas fallaste al terminar</li>
+            <li>No uses IA: esto es una autoevaluación personal</li>
+            <li>El resultado es privado</li>
+            <li>Si no respondes a tiempo, se contará como incorrecta</li>
+            <li>El borde verde es el temporizador</li>
             <li>
-                Cada pregunta consta con un total de 25 segundos disponibles
-                para responder
-            </li>
-            <li>
-                Al finalizar el examen, podrás ver en qué preguntas fallaste (en
-                caso de haber fallado)
-            </li>
-            <li>
-                Recomendamos no usar IA para responder ya que se busca
-                (auto)evaluar los conocimientos de cada uno
-            </li>
-            <li>
-                Recuerda que el resultado de este exámen no es público, está
-                hecho con el propósito de autoevaluación personal
-            </li>
-            <li>
-                Si no seleccionas una respuesta antes de que acabe el tiempo,
-                automáticamente se marcará como respuesta incorrecta
-            </li>
-            <li>
-                Así como se ve en esta vista, ese borde de color verde que
-                comienza a rellenarse, es el temporizador disponible para las
-                preguntas
-            </li>
-            <li>
-                Cuando te encuentres seleccionando una respuesta, tendrás que
-                marcarla antes de continuar con la siguiente pregunta por lo
-                que, una vez marcada, no podrás volver a cambiar tu respuesta.
-                Esto está hecho de esta manera para mostrar cuál era la
-                respuesta correcta en caso de haber selccionado la opción
-                incorrecta
+                Debes confirmar tu respuesta para continuar; no podrás
+                modificarla después
             </li>
         </ul>
         <button

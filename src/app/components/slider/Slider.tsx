@@ -35,9 +35,10 @@ export default function Slider({ isNavigated, height, slides, space }: iModal) {
                 {[...Array(7)].map((_, index) => (
                     <SwiperSlide key={index}>
                         <Image
-                            src="/svg/1920x1080.svg"
+                            src="svg/1920x1080.svg"
                             alt="team"
                             width={1920}
+                            priority={true}
                             height={1080}
                             className="w-full h-full object-cover"
                         />

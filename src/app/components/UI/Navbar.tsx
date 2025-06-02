@@ -9,8 +9,8 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 
 const navigation = [
-    { name: "Inicio", href: "/portfolio" },
-    { name: "Landing Page", href: "/portfolio/landing" },
+    { name: "Inicio", href: "/" },
+    { name: "Landing Page", href: "/landing" },
     { name: "Single Page Aplication", href: "#" },
 ];
 
