@@ -31,7 +31,8 @@ jobs:
               run: npm i
 
             - name: Build and export static site with Next.js 🏗️
-              run: npm run build
+              run: |
+                  npm run build
                   npx next export
 
             - name: Upload artifact 📡
