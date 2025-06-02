@@ -8,9 +8,11 @@ import { quizQuestions } from "./data/dummyQuiz";
 export default function Home() {
     const [loadTimer, setLoadTimer] = useState(true);
     const [questions, _] = useState(quizQuestions);
+    const [step, setStep] = useState(0);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const rectRef = useRef<SVGRectElement>(null);
+
     useEffect(() => {
         if (!containerRef.current || !rectRef.current) return;
 
@@ -37,30 +39,46 @@ export default function Home() {
             easing: "linear",
             duration: 25000,
         });
+
         setLoadTimer(false);
-    }, [loadTimer]);
+    }, [loadTimer, step]);
 
     const nextQuestion = () => {
         setLoadTimer(true);
     };
 
+    const forceCompleteTimer = () => {
+        if (rectRef.current) {
+            animate(rectRef.current, {
+                strokeDashoffset: 0,
+                duration: 300,
+                easing: "linear",
+            });
+        }
+    };
+
     return (
         <div className="pt-10">
             <div ref={containerRef} className="relative w-[1200px] mx-auto">
-                <svg className="absolute inset-0 z-10 w-full h-full pointer-events-none">
+                <svg className="absolute inset-0 z-10 w-full h-full pointer-events-none overflow-visible">
                     <rect
                         ref={rectRef}
-                        x="0"
-                        y="0"
+                        x="1"
+                        y="1"
                         fill="none"
-                        strokeWidth="4"
+                        strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
                 </svg>
 
                 <div className="relative w-full bg-gray-100 rounded-md shadow-md p-4 mb-4 border z-0">
-                    <QuizForm questions={questions} resetTimer={nextQuestion} />
+                    <QuizForm
+                        questions={questions}
+                        resetTimer={nextQuestion}
+                        forceCompleteTimer={forceCompleteTimer}
+                        onStepChange={setStep}
+                    />
                 </div>
             </div>
         </div>

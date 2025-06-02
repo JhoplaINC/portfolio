@@ -1,5 +1,5 @@
 import { Question } from "@/app/interfaces/question.interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuestionStep from "../steps/QuestionStep";
 import { Intro } from "../steps/Intro";
 import { FinalStep } from "../steps/FinalStep";
@@ -7,13 +7,17 @@ import { FinalStep } from "../steps/FinalStep";
 interface QuizFormProps {
     questions: Question[];
     resetTimer?: () => void;
+    forceCompleteTimer?: () => void;
     isFinalQuestion?: () => boolean;
+    onStepChange?: (step: number) => void;
 }
 
 export default function QuizForm({
     questions,
     resetTimer,
+    forceCompleteTimer,
     isFinalQuestion,
+    onStepChange,
 }: QuizFormProps) {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<string[]>([]);
@@ -31,6 +35,10 @@ export default function QuizForm({
         setCurrentStep((prev) => prev + 1);
     };
 
+    useEffect(() => {
+        onStepChange?.(currentStep);
+    }, [currentStep]);
+
     const startQuiz = () => {
         setCurrentStep(1);
         resetTimer?.();
@@ -47,6 +55,7 @@ export default function QuizForm({
                     <QuestionStep
                         question={questions[currentStep - 1]}
                         onNext={handleNext}
+                        forceCompleteTimer={forceCompleteTimer}
                     />
                 </div>
             )}

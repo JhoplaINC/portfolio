@@ -1,13 +1,21 @@
 import { Question } from "@/app/interfaces/question.interface";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 interface Props {
     question: Question;
     onNext: (answer: string) => void;
+    forceCompleteTimer?: () => void;
 }
 
-export default function QuestionStep({ question, onNext }: Props) {
+export default function QuestionStep({
+    question,
+    onNext,
+    forceCompleteTimer,
+}: Props) {
     const [selected, setSelected] = useState<string | null>(null);
+    const [answered, setAnswered] = useState(false);
+    const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
     const correctSoundRef = useRef<HTMLAudioElement | null>(null);
     const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -25,20 +33,46 @@ export default function QuestionStep({ question, onNext }: Props) {
         }
     };
 
-    const handleMarkedAnswer = (answer: string, index: number) => {
-        const selectedAnswer = document.getElementById(index.toString());
-        if (answer === question.correctAnswer) {
+    const handleMarkedAnswer = (answer: string) => {
+        if (answered) return;
+
+        if (forceCompleteTimer) forceCompleteTimer();
+
+        const isAnswerCorrect = answer === question.correctAnswer;
+        setCorrectAnswer(question.correctAnswer);
+        setIsCorrect(isAnswerCorrect);
+
+        if (isCorrect) {
             playSound(correctSoundRef, 0.5);
-            selectedAnswer?.classList.add("bg-green-200");
-            alert("Respuesta correcta");
-            // handleNext(answer);
         } else {
             playSound(wrongSoundRef, 0.5);
-            selectedAnswer?.classList.add("bg-red-200");
-            alert("Respuesta incorrecta");
-            // handleNext();
         }
+
+        setAnswered(true);
+
+        // setTimeout(() => {
+        //     onNext(answer);
+        // }, 1500);
     };
+
+    const getButtonClass = (option: string) => {
+        if (!answered) {
+            return selected === option
+                ? "bg-blue-100"
+                : "bg-white hover:bg-green-100";
+        }
+
+        if (option === correctAnswer) return "bg-green-200";
+        if (option === selected) return "bg-red-200";
+        return "bg-white opacity-60";
+    };
+
+    useEffect(() => {
+        setSelected(null);
+        setAnswered(false);
+        setCorrectAnswer(null);
+        setIsCorrect(null);
+    }, [question]);
 
     return (
         <div className="w-full h-full flex flex-col justify-center items-center">
@@ -54,16 +88,14 @@ export default function QuestionStep({ question, onNext }: Props) {
                     src="/sounds/wrong.m4a"
                     preload="auto"
                 />
-                {question.options.map((option, index) => (
+                {question.options.map((option) => (
                     <button
                         key={option}
                         onClick={() => setSelected(option)}
-                        id={(index + 1).toString()}
-                        className={`px-4 py-2 border rounded-lg ${
-                            selected === option
-                                ? "bg-green-200"
-                                : "bg-white hover:bg-green-100"
-                        }`}
+                        disabled={answered}
+                        className={`px-4 py-2 border rounded-lg transition ${getButtonClass(
+                            option
+                        )}`}
                     >
                         {option}
                     </button>
@@ -71,17 +103,22 @@ export default function QuestionStep({ question, onNext }: Props) {
             </div>
             <div className="flex flex-row gap-4 w-full justify-center">
                 <button
-                    onClick={() =>
-                        selected && handleMarkedAnswer(selected, question.id)
-                    }
-                    disabled={!selected}
+                    onClick={() => selected && handleMarkedAnswer(selected)}
+                    disabled={!selected || answered}
                     className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50 shadow hover:bg-blue-600 transition disabled:hover:bg-blue-500"
                 >
                     Marcar respuesta
                 </button>
                 <button
-                    onClick={() => selected && onNext(selected)}
-                    disabled={!selected}
+                    onClick={() => {
+                        if (answered && selected) {
+                            onNext(selected);
+
+                            // Hacer scroll al inicio del contenedor
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                    }}
+                    disabled={!answered}
                     className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50 shadow hover:bg-green-600 transition disabled:hover:bg-green-500"
                 >
                     Siguiente
