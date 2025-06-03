@@ -19,6 +19,7 @@ export default function QuestionStep({
 
     const correctSoundRef = useRef<HTMLAudioElement | null>(null);
     const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const playSound = (
         audioRef: RefObject<HTMLAudioElement | null>,
@@ -35,6 +36,10 @@ export default function QuestionStep({
 
     const handleMarkedAnswer = (answer: string) => {
         if (answered) return;
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
 
         if (forceCompleteTimer) forceCompleteTimer();
 
@@ -72,7 +77,27 @@ export default function QuestionStep({
         setAnswered(false);
         setCorrectAnswer(null);
         setIsCorrect(null);
-    }, [question]);
+
+        timeoutRef.current = setTimeout(() => {
+            if (!answered) {
+                setCorrectAnswer(question.correctAnswer);
+                setIsCorrect(false);
+                setAnswered(true);
+                playSound(wrongSoundRef, 0.5);
+
+                setTimeout(() => {
+                    onNext("");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 1500);
+            }
+        }, 25000);
+
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [question, onNext]);
 
     return (
         <div className="w-full h-full flex flex-col justify-center items-center">

@@ -26,15 +26,18 @@ export const FinalStep = ({
             <h1 className="text-2xl font-bold mb-4">
                 ¡Gracias por completar el examen!
             </h1>
-            <p className="mb-4">Has respondido todas las preguntas.</p>
+            <p className="mb-4">A continuación, verás el detalle final.</p>
             {incorrectAnswers.length > 0 ? (
-                <div className="bg-red-100 p-4 rounded-md shadow-md w-full max-w-md">
+                <div className="p-4 w-full max-w-md">
                     <h2 className="text-lg font-semibold mb-2">
                         Respuestas incorrectas:
                     </h2>
                     <ul className="list-disc pl-5">
                         {incorrectAnswers.map((item, index) => (
-                            <li key={index} className="mb-2">
+                            <li
+                                key={index}
+                                className="mb-2 bg-red-100 list-none px-4 py-2 rounded-md shadow-sm"
+                            >
                                 <strong>{item?.question}</strong>
                                 <br />
                                 Respuesta correcta:{" "}
@@ -44,7 +47,7 @@ export const FinalStep = ({
                                 <br />
                                 Tu respuesta:{" "}
                                 <span className="text-red-600">
-                                    {item?.user}
+                                    {item?.user ? item.user : "No respondida"}
                                 </span>
                             </li>
                         ))}
